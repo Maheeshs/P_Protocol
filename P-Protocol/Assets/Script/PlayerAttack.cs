@@ -87,7 +87,7 @@ public class PlayerAttack : MonoBehaviour
         if (comboActive)
         {
             damage = 50;
-            currentArrowForce = 20f;
+            currentArrowForce = 50f;
             comboActive = false;
             Debug.Log("Combo Shot!");
         }
