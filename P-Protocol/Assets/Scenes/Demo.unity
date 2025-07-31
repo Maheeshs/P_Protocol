@@ -3170,6 +3170,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpForce: 7
+  dashSpeed: 25
+  dashFrames: 10
+  cooldownFrames: 20
+  invincibleFrames: 8
 --- !u!54 &885841204
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3204,7 +3208,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 885841202}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: ae231b65de2d32246b8def6a47eb5472, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

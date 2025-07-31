@@ -12,6 +12,18 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private bool isGrounded;
 
+    //Dash
+    public float dashSpeed = 25f;
+    public int dashFrames = 10;            
+    public int cooldownFrames = 20;        
+    public int invincibleFrames = 8;
+
+    private int dashCounter = 0;
+    private int cooldownCounter = 0;
+    private bool isInvincible = false;
+
+    private Vector3 dashDirection;
+
     void Awake()
     {
         controls = new PlayerControls();
@@ -21,6 +33,9 @@ public class PlayerMovement : MonoBehaviour
 
        
         controls.Player.Jump.performed += ctx => Jump();
+
+        controls.Player.Dash.performed += ctx => Dash();
+
     }
 
     void OnEnable()
@@ -44,7 +59,29 @@ public class PlayerMovement : MonoBehaviour
         Vector3 movement = new Vector3(moveInput.x * moveSpeed, rb.velocity.y, 0);
         rb.velocity = movement;
         RotateTowardsMovement();
+        if (dashCounter > 0)
+        {
+            rb.velocity = dashDirection * dashSpeed;
+
+            // Invincibility window
+            isInvincible = dashCounter > (dashFrames - invincibleFrames);
+
+            dashCounter--;
+
+            if (dashCounter == 0)
+            {
+                rb.velocity = Vector3.zero;
+                isInvincible = false;
+                cooldownCounter = cooldownFrames;
+            }
+        }
+        else
+        {
+            if (cooldownCounter > 0)
+                cooldownCounter--;
+        }
     }
+
     void RotateTowardsMovement()
     {
         if(moveInput.x!=0)
@@ -63,7 +100,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-   
+    private void Dash()
+    {
+        if (dashCounter > 0 || cooldownCounter > 0)
+            return;
+
+        dashDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
+
+        if (dashDirection == Vector3.zero)
+            dashDirection = transform.forward;
+
+        dashCounter = dashFrames;
+    }
+
+
 
     void OnCollisionStay(Collision collision)
     {
